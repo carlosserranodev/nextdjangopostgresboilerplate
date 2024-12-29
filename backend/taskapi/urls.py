@@ -16,8 +16,29 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework import routers
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+from users.views import UserViewSet
+from accounts.views import BankAccountViewSet, AccountViewSet
+from transactions.views import TransactionViewSet
+from categories.views import CategoryViewSet
+
+router = routers.DefaultRouter()
+router.register(r'users', UserViewSet)
+router.register(r'bank-accounts', BankAccountViewSet, basename='bank-account')
+router.register(r'accounts', AccountViewSet, basename='account')
+router.register(r'transactions', TransactionViewSet, basename='transaction')
+router.register(r'categories', CategoryViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('tasks.urls')),
+    path('api/', include(router.urls)),
+    path('api/', include('users.urls')),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/plaid/', include('plaid_integration.urls')),
 ]

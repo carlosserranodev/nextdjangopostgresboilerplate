@@ -1,0 +1,9 @@
+import TransactionForm from '../../../../components/forms/TransactionForm'
+
+export default function NewTransactionPage() {
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <TransactionForm />
+    </div>
+  )
+}
